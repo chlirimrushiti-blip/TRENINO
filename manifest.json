@@ -1,13 +1,12 @@
 {
   "name": "TRENINO",
   "short_name": "Trenino",
-  "description": "Costruisci le piste, carica i passeggeri e fai partire il trenino!",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "index.html",
+  "scope": ".",
   "display": "standalone",
-  "orientation": "landscape",
   "background_color": "#8fd79a",
   "theme_color": "#27ae60",
+  "orientation": "portrait-primary",
   "icons": [
     {
       "src": "icon-192.png",
