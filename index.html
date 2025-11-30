@@ -10,8 +10,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
-...
-
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
@@ -155,7 +153,72 @@ body{
   pointer-events:none;
   text-shadow:0 2px 3px rgba(0,0,0,0.35);
 }
-  /* --- FULLSCREEN + ROTAZIONE PERFETTA --- */
+
+/* --- SPLASH SCREEN TRENINO --- */
+
+#splash{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#27ae60,#2ecc71);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  color:#ffffff;
+  text-align:center;
+}
+
+.splash-content{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding:20px;
+}
+
+.splash-icon{
+  font-size:60px;
+  text-shadow:0 4px 10px rgba(0,0,0,0.35);
+}
+
+#splash h1{
+  font-size:32px;
+  letter-spacing:2px;
+  text-shadow:0 3px 6px rgba(0,0,0,0.35);
+}
+
+.splash-tagline{
+  max-width:260px;
+  font-size:14px;
+  opacity:0.9;
+}
+
+.splash-loader{
+  margin-top:8px;
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  border:5px solid rgba(255,255,255,0.35);
+  border-top-color:#ffffff;
+  animation:spin 1s linear infinite;
+}
+
+#splash.hide{
+  animation:fadeOutSplash 0.6s ease forwards;
+}
+
+@keyframes spin{
+  to{ transform:rotate(360deg); }
+}
+
+@keyframes fadeOutSplash{
+  to{
+    opacity:0;
+    visibility:hidden;
+  }
+}
+
+/* --- FULLSCREEN + ROTAZIONE PERFETTA --- */
 
 html, body {
   width: 100%;
@@ -183,7 +246,7 @@ html, body {
   overflow: hidden;
 }
 
-/* --- modalità VERTICALE (telefono in mano normale) --- */
+/* --- modalità VERTICALE --- */
 @media (orientation: portrait) {
   body {
     display: flex;
@@ -196,7 +259,7 @@ html, body {
   }
 }
 
-/* --- modalità ORIZZONTALE (telefono ruotato) --- */
+/* --- modalità ORIZZONTALE --- */
 @media (orientation: landscape) {
   body {
     display: flex;
@@ -210,10 +273,20 @@ html, body {
     transform-origin: center center;
   }
 }
-
 </style>
 </head>
 <body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-content">
+    <div class="splash-icon">🚂</div>
+    <h1>TRENINO</h1>
+    <p class="splash-tagline">Costruisci la pista, carica i passeggeri e... CIUF CIUF!</p>
+    <div class="splash-loader"></div>
+  </div>
+</div>
+
 <div class="game">
 
   <!-- BINARI -->
@@ -281,7 +354,7 @@ html, body {
     </button>
   </div>
 
-  <!-- OGGETTI: semaforo, passeggero, alberi, montagna -->
+  <!-- OGGETTI -->
   <div class="toolbar">
     <button class="tool-btn" data-tool="signal">
       <svg viewBox="0 0 100 100">
@@ -659,19 +732,27 @@ const presetsBase = {
     createRectanglePreset(1,2,5,7),
     createRectanglePreset(1,1,5,8),
     createRectanglePreset(2,1,6,8),
-    createRectanglePreset(1,0,5,9)
+    createRectanglePreset(1,0,5,9),
+    createRectanglePreset(2,3,4,8),
+    createRectanglePreset(0,2,4,6),
+    createRectanglePreset(1,4,5,9),
+    createRectanglePreset(0,0,3,5)
   ],
   medium: [
     createRectanglePreset(0,2,6,7),
     createRectanglePreset(1,1,5,8),
+    createRectanglePreset(0,3,6,6),
+    createRectanglePreset(1,2,6,9),
     createSnakeMedium1(),
     createSnakeMedium2()
   ],
   hard: [
     createSnakeHard1(),
     createSnakeHard2(),
-    createRectanglePreset(0,1,6,8),
-    createRectanglePreset(0,0,6,9)
+    createSnakeMedium1(),
+    createSnakeMedium2(),
+    createRectanglePreset(0,1,6,3),
+    createRectanglePreset(1,0,3,9)
   ]
 };
 
@@ -1004,9 +1085,20 @@ document.getElementById("stopTrain").addEventListener("click",()=>{
   updatePassengerVisualTrain1();
   updatePassengerVisualTrain2();
 });
-</script>
 
-<script>
+/* --- NASCONDI SPLASH QUANDO LA PAGINA È PRONTA --- */
+window.addEventListener("load", () => {
+  const splash = document.getElementById("splash");
+  if(!splash) return;
+
+  setTimeout(() => {
+    splash.classList.add("hide");
+    setTimeout(() => {
+      splash.style.display = "none";
+    }, 600);
+  }, 800);
+});
+
 // --- REGISTRAZIONE SERVICE WORKER --- //
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -1015,8 +1107,5 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
-
 </body>
 </html>
-
-
